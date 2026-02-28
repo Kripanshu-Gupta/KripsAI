@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  clerkUserId   String         @unique
+  email         String         @unique
+  name          String?
+  industry      String?
+  experience    String?        // Beginner, Intermediate, Senior
+  careerGoals   String?
+  resumes       Resume[]
+  interviews    Interview[]
+  coverLetters  CoverLetter[]
+  insights      IndustryInsight[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Resume {
+  id        String   @id @default(uuid())
+  title     String
+  content   String   @db.Text
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Interview {
+  id        String   @id @default(uuid())
+  jobTitle  String
+  questions String   @db.Text
+  feedback  String?  @db.Text
+  score     Int?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CoverLetter {
+  id        String   @id @default(uuid())
+  jobDesc   String   @db.Text
+  content   String   @db.Text
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model IndustryInsight {
+  id          String   @id @default(uuid())
+  industry    String
+  experience  String
+  content     String   @db.Text // Contains Markdown report from Gemini
+  demandData  String?  @db.Text // Contains stringified JSON array for domain comparison chart
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

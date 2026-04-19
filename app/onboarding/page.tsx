@@ -14,10 +14,10 @@ export default async function OnboardingPage() {
         <div className="min-h-screen py-24 flex items-center justify-center container mx-auto px-4">
             <div className="max-w-xl w-full bg-card rounded-xl p-8 border border-border shadow-lg space-y-8 text-center">
                 <h1 className="text-4xl font-extrabold tracking-tight">
-                    Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">KripaAI</span>
+                    Welcome to <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-600">KripaAI</span>
                 </h1>
                 <p className="text-lg text-muted-foreground pb-4">
-                    Let's set up your profile to start receiving customized career coaching, resume tips, and interview feedback.
+                    Let&apos;s set up your profile to start receiving customized career coaching, resume tips, and interview feedback.
                 </p>
 
                 <OnboardingForm />

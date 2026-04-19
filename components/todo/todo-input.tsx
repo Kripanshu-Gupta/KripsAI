@@ -59,7 +59,7 @@ export function TodoInput({ onAdd }: TodoInputProps) {
             </div>
 
             <div className="flex gap-3 w-full sm:w-auto">
-                <div className="space-y-1.5 w-[140px]">
+                <div className="space-y-1.5 w-35">
                     <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                         Priority
                     </label>
@@ -87,7 +87,7 @@ export function TodoInput({ onAdd }: TodoInputProps) {
                     </Select>
                 </div>
 
-                <div className="space-y-1.5 w-[160px]">
+                <div className="space-y-1.5 w-40">
                     <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                         Due Date
                     </label>

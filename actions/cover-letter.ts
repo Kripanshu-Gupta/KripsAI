@@ -64,9 +64,6 @@ export async function generateCoverLetter(data: { jobDescription: string }) {
         throw new Error("Failed to generate cover letter.");
     }
 
-    // Generate a quick title for the list view using a heuristic
-    const autoTitle = data.jobDescription.split(' ').slice(0, 5).join(' ') + "... Cover Letter";
-
     const coverLetter = await prisma.coverLetter.create({
         data: {
             userId: dbUser.id,

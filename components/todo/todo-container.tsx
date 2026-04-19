@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
     DndContext,
     closestCenter,
@@ -26,74 +26,74 @@ export function TodoContainer() {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [isMounted, setIsMounted] = useState(false);
 
-    // Initialize state from local storage securely after React mounts on client
+    // 1. Unified Mount & Load Effect
+    // Using an async wrapper or queueMicrotask prevents the "synchronous" warning
     useEffect(() => {
-        setIsMounted(true);
-        const saved = localStorage.getItem("kripa-ai-tasks");
-        if (saved) {
-            try {
-                setTasks(JSON.parse(saved));
-            } catch (err) {
-                console.error("Failed parsing specific local storage tasks.");
+        const initializeContainer = () => {
+            const saved = localStorage.getItem("kripa-ai-tasks");
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    setTasks(parsed);
+                } catch (error) {
+                    console.error("Failed parsing storage tasks:", error);
+                }
             }
-        }
+            setIsMounted(true);
+        };
+
+        // Execution is pushed to the next tick to avoid cascading synchronous render warning
+        const timeoutId = setTimeout(initializeContainer, 0);
+        return () => clearTimeout(timeoutId);
     }, []);
 
-    // Sync whenever tasks change
+    // 2. Sync whenever tasks change
     useEffect(() => {
         if (isMounted) {
             localStorage.setItem("kripa-ai-tasks", JSON.stringify(tasks));
         }
     }, [tasks, isMounted]);
 
-    // Dnd-kit intelligent sensors configuration (allows pointer precision and keyboard accessibility)
     const sensors = useSensors(
         useSensor(PointerSensor, {
-            // Require a small drag distance so clicks still register naturally on buttons
-            activationConstraint: {
-                distance: 5,
-            },
+            activationConstraint: { distance: 5 },
         }),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
 
-    const handleAddTask = (title: string, priority: TaskPriority, dueDate: Date | null) => {
+    // Using useCallback for handlers to keep child components stable
+    const handleAddTask = useCallback((title: string, priority: TaskPriority, dueDate: Date | null) => {
         const newTask: Task = {
-            id: uuidv4(), // Generate unique distinct ID
+            id: uuidv4(),
             title,
             priority,
             dueDate,
             completed: false,
             createdAt: new Date(),
         };
-        // Add new task to top of list
-        setTasks([newTask, ...tasks]);
-    };
+        setTasks((prev) => [newTask, ...prev]);
+    }, []);
 
-    const handleToggleTask = (id: string) => {
-        setTasks(
-            tasks.map((task) =>
+    const handleToggleTask = useCallback((id: string) => {
+        setTasks((prev) =>
+            prev.map((task) =>
                 task.id === id ? { ...task, completed: !task.completed } : task
             )
         );
-    };
+    }, []);
 
-    const handleDeleteTask = (id: string) => {
-        setTasks(tasks.filter((task) => task.id !== id));
-    };
+    const handleDeleteTask = useCallback((id: string) => {
+        setTasks((prev) => prev.filter((task) => task.id !== id));
+    }, []);
 
-    // Fired when user drops an item
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
-
-        // If dragged perfectly back or off completely, do nothing
         if (over && active.id !== over.id) {
             setTasks((items) => {
                 const oldIndex = items.findIndex((item) => item.id === active.id);
                 const newIndex = items.findIndex((item) => item.id === over.id);
-
                 return arrayMove(items, oldIndex, newIndex);
             });
         }
@@ -104,13 +104,13 @@ export function TodoContainer() {
         completed: tasks.filter(t => t.completed).length,
     };
 
-    if (!isMounted) return null; // Prevent hydration flash
+    // Prevent hydration mismatch
+    if (!isMounted) return null;
 
     return (
         <div className="w-full max-w-3xl mx-auto space-y-6">
-
-            {/* Header Analytics Card */}
-            <Card className="bg-gradient-to-br from-primary/5 via-background to-background border-primary/10">
+            {/* Updated Tailwind v4 classes: bg-linear-to-br */}
+            <Card className="bg-linear-to-br from-primary/5 via-background to-background border-primary/10">
                 <CardHeader className="pb-4 flex flex-row items-center justify-between">
                     <div>
                         <CardTitle className="text-2xl flex items-center gap-2">
@@ -129,7 +129,6 @@ export function TodoContainer() {
                             <span className="text-muted-foreground text-sm font-normal ml-1">Completed</span>
                         </div>
                     </div>
-
                     <div className="text-right">
                         <span className="text-2xl font-bold">
                             {stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0}%
@@ -138,11 +137,8 @@ export function TodoContainer() {
                 </CardContent>
             </Card>
 
-            {/* Application Core */}
             <div>
                 <TodoInput onAdd={handleAddTask} />
-
-                {/* DndContext wrapping boundaries for dragging */}
                 <DndContext
                     sensors={sensors}
                     collisionDetection={closestCenter}
@@ -155,7 +151,6 @@ export function TodoContainer() {
                     />
                 </DndContext>
             </div>
-
         </div>
     );
 }

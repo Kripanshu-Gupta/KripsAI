@@ -11,6 +11,15 @@ import {
 } from "@/components/ui/card";
 import { InterviewSetup } from "@/components/interview/interview-setup";
 
+// Define the interface to tell TypeScript what an 'interview' looks like
+interface MockInterview {
+    id: string;
+    jobTitle: string;
+    score: number | null;
+    feedback: string | null;
+    createdAt: Date | string;
+}
+
 export default async function InterviewDashboardPage() {
     const user = await currentUser();
 
@@ -18,7 +27,8 @@ export default async function InterviewDashboardPage() {
         redirect("/sign-in");
     }
 
-    const pastInterviews = await getUserInterviews();
+    // Explicitly type the result from your action
+    const pastInterviews: MockInterview[] = await getUserInterviews();
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-7xl">
@@ -30,8 +40,6 @@ export default async function InterviewDashboardPage() {
             </div>
 
             <div className="grid lg:grid-cols-12 gap-8">
-
-                {/* Setup Configuration Column */}
                 <div className="lg:col-span-4 space-y-6">
                     <Card>
                         <CardHeader>
@@ -46,19 +54,19 @@ export default async function InterviewDashboardPage() {
                     </Card>
                 </div>
 
-                {/* Previous Results Column */}
                 <div className="lg:col-span-8 flex flex-col space-y-6">
                     <h2 className="text-2xl font-semibold tracking-tight">Your Past Sessions</h2>
 
                     {pastInterviews.length === 0 ? (
                         <div className="p-8 text-center border-2 border-dashed rounded-lg bg-muted/20 text-muted-foreground flex-1 flex items-center justify-center">
-                            You haven't completed any mock interviews yet.
+                            You haven&apos;t completed any mock interviews yet.
                         </div>
                     ) : (
                         <div className="grid gap-6 md:grid-cols-2">
-                            {pastInterviews.map((interview) => (
+                            {/* The error is resolved here by the MockInterview interface */}
+                            {pastInterviews.map((interview: MockInterview) => (
                                 <Card key={interview.id} className="relative overflow-hidden group hover:border-primary/50 transition-colors">
-                                    <div className={`absolute top-0 right-0 p-3 text-2xl font-extrabold opacity-10 blur-[1px] group-hover:opacity-20 transition-opacity ${interview.score && interview.score > 80 ? 'text-green-500' : 'text-primary'
+                                    <div className={`absolute top-0 right-0 p-3 text-2xl font-extrabold opacity-10 blur-[1px] group-hover:opacity-20 transition-opacity ${(interview.score ?? 0) > 80 ? 'text-green-500' : 'text-primary'
                                         }`}>
                                         {interview.score || '--'}/100
                                     </div>
@@ -70,7 +78,6 @@ export default async function InterviewDashboardPage() {
                                     </CardHeader>
                                     <CardContent>
                                         <div className="text-sm text-foreground/80 line-clamp-3 mb-4">
-                                            {/* We parse the feedback JSON to extract the overall blurb */}
                                             {(() => {
                                                 try {
                                                     if (!interview.feedback) return "No feedback provided.";

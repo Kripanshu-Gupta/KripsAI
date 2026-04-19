@@ -23,6 +23,9 @@ export default async function InsightsDashboardPage() {
 
     const latestInsight = await getLatestInsight();
 
+    // Use the pre-calculated recency flag returned from the action
+    const isRecentlyGenerated = latestInsight?.isRecentlyGenerated ?? false;
+
     return (
         <div className="container mx-auto px-4 py-8 max-w-7xl">
             <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -34,10 +37,8 @@ export default async function InsightsDashboardPage() {
                 </div>
 
                 <div className="w-full md:w-auto">
-                    {/* Limit generation frequency on the front-end visually if one exists within 24 hours */}
-                    <InsightsGeneratorButton disabled={
-                        latestInsight ? (Date.now() - latestInsight.createdAt.getTime()) / (1000 * 60 * 60) < 24 : false
-                    } />
+                    {/* Pass the pre-calculated variable here */}
+                    <InsightsGeneratorButton disabled={isRecentlyGenerated} />
                 </div>
             </div>
 
@@ -67,7 +68,7 @@ export default async function InsightsDashboardPage() {
                             <CardContent className="p-6 md:p-8">
                                 <div className="prose prose-base dark:prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary">
                                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                        {latestInsight.content}
+                                        {latestInsight.content || ""}
                                     </ReactMarkdown>
                                 </div>
                             </CardContent>

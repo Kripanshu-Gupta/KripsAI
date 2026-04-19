@@ -73,7 +73,7 @@ export function TodoItem({ task, onToggle, onDelete }: TodoItemProps) {
                 {/* Status Toggle */}
                 <button
                     onClick={() => onToggle(task.id)}
-                    className="flex-shrink-0 focus:outline-none transition-transform hover:scale-110 active:scale-95"
+                    className="shrink-0 focus:outline-none transition-transform hover:scale-110 active:scale-95"
                 >
                     {task.completed ? (
                         <CheckCircle2 className="w-6 h-6 text-primary" />
@@ -113,7 +113,7 @@ export function TodoItem({ task, onToggle, onDelete }: TodoItemProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => onDelete(task.id)}
-                className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
             >
                 <Trash2 className="w-4 h-4" />
             </Button>

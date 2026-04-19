@@ -20,7 +20,7 @@ export default async function TodoPage() {
 
     return (
         <div className="container mx-auto py-10 px-4">
-            <h1 className="text-4xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500">
+            <h1 className="text-4xl font-bold mb-8 text-center bg-clip-text text-transparent bg-linear-to-r from-primary to-purple-500">
                 Action Plan & Tasks
             </h1>
             <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">

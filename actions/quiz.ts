@@ -1,6 +1,6 @@
 "use server";
 
-import { generateCareerContent } from "@/lib/gemini";
+import { generateCareerContent, parseJsonFromGemini } from "@/lib/gemini";
 import { currentUser } from "@clerk/nextjs/server";
 
 const generateQuizPrompt = (domain: string) => `
@@ -40,8 +40,8 @@ export async function generateQuizAction(domain: string) {
             throw new Error("Failed to generate quiz content.");
         }
 
-        // Strip markdown JSON block format if Gemini mistakenly included it despite instructions
-        const cleanedJson = rawGeminiOutput.replace(/```json/g, "").replace(/```/g, "").trim();
+        // Extract valid JSON from LLM output
+        const cleanedJson = parseJsonFromGemini(rawGeminiOutput);
 
         const structuredData = JSON.parse(cleanedJson);
         return structuredData;

@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { generateCareerContent } from "@/lib/gemini";
+import { generateCareerContent, parseJsonFromGemini } from "@/lib/gemini";
 
 const generateInsightsPrompt = (
     industry: string,
@@ -78,13 +78,18 @@ export async function generateIndustryInsights() {
         throw new Error("Failed to generate industry insights.");
     }
 
-    // Strip markdown JSON block format if Gemini mistakenly included it despite instructions
-    const cleanedJson = rawGeminiOutput.replace(/```json/g, "").replace(/```/g, "").trim();
+    // Strip markdown JSON block format and extract the pure JSON object
+    const cleanedJson = parseJsonFromGemini(rawGeminiOutput);
 
-    let structuredData: { markdownReport: string, chartData: any[] };
+    interface InsightData {
+        markdownReport: string;
+        chartData: Array<{ domain: string; demand: number }>;
+    }
+
+    let structuredData: InsightData;
     try {
         structuredData = JSON.parse(cleanedJson);
-    } catch (error) {
+    } catch {
         throw new Error("AI returned malformed JSON payload.");
     }
 
@@ -114,8 +119,15 @@ export async function getLatestInsight() {
 
     if (!dbUser) return null;
 
-    return await prisma.industryInsight.findFirst({
+    const insight = await prisma.industryInsight.findFirst({
         where: { userId: dbUser.id },
         orderBy: { createdAt: "desc" },
     });
+
+    if (!insight) return null;
+
+    const isRecentlyGenerated =
+        (Date.now() - insight.createdAt.getTime()) / (1000 * 60 * 60) < 24;
+
+    return { ...insight, isRecentlyGenerated };
 }

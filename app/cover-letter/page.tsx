@@ -14,6 +14,13 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
+interface CoverLetter {
+    id: string;
+    jobDesc: string;
+    content: string;
+    createdAt: Date | string;
+}
+
 export default async function CoverLetterDashboardPage() {
     const user = await currentUser();
 
@@ -55,11 +62,11 @@ export default async function CoverLetterDashboardPage() {
 
                     {generatedLetters.length === 0 ? (
                         <div className="p-8 text-center border-2 border-dashed rounded-lg bg-muted/20 text-muted-foreground">
-                            You haven't generated any cover letters yet. Paste a job description to begin!
+                            You haven&apos;t generated any cover letters yet. Paste a job description to begin!
                         </div>
                     ) : (
                         <div className="space-y-6">
-                            {generatedLetters.map((letter: any) => (
+                            {generatedLetters.map((letter: CoverLetter) => (
                                 <Card key={letter.id} className="overflow-hidden">
                                     <div className="bg-muted/30 border-b border-border/50 flex flex-row items-center justify-between p-6">
                                         <div className="flex flex-col space-y-1.5">

@@ -14,6 +14,13 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
+type Resume = {
+    id: string;
+    title: string;
+    content: string;
+    createdAt: Date;
+};
+
 export default async function ResumeBuilderPage() {
     const user = await currentUser();
 
@@ -54,11 +61,11 @@ export default async function ResumeBuilderPage() {
 
                     {resumes.length === 0 ? (
                         <div className="p-8 text-center border-2 border-dashed rounded-lg bg-muted/20 text-muted-foreground">
-                            You haven't generated any resumes yet. Fill out the form to get started!
+                            You haven&apos;t generated any resumes yet. Fill out the form to get started!
                         </div>
                     ) : (
                         <div className="space-y-6">
-                            {resumes.map((resume: any) => (
+                            {resumes.map((resume: Resume) => (
                                 <Card key={resume.id} className="overflow-hidden">
                                     <div className="bg-muted/30 border-b border-border/50 flex flex-row items-center justify-between p-6">
                                         <div className="flex flex-col space-y-1.5">

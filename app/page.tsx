@@ -162,10 +162,10 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background flex flex-col items-center justify-between">
       {/* Navbar Placeholder */}
-      <header className="w-full p-6 flex items-center justify-between border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="w-full p-6 flex items-center justify-between border-b border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="flex items-center space-x-3">
           <Image src="/logo.png" alt="KripaAI Logo" width={32} height={32} className="rounded-md" />
-          <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500">
+          <span className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-primary to-purple-500">
             KripaAI
           </span>
         </div>
@@ -201,13 +201,13 @@ export default function Home() {
       {/* Hero Section */}
       <section className="flex-1 w-full flex flex-col items-center justify-center px-4 text-center py-24 md:py-32 relative overflow-hidden">
         {/* Decorative Background Gradients */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-primary/20 rounded-full blur-[120px] -z-10 pointer-events-none" />
-        <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-purple-500/20 rounded-full blur-[100px] -z-10 pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-125 bg-primary/20 rounded-full blur-[120px] -z-10 pointer-events-none" />
+        <div className="absolute top-1/4 right-1/4 w-100 h-100 bg-purple-500/20 rounded-full blur-[100px] -z-10 pointer-events-none" />
 
         <div className="space-y-6 max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight">
             Accelerate Your Career with <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-600">
               AI-Powered Coaching
             </span>
           </h1>
@@ -231,7 +231,7 @@ export default function Home() {
 
         {/* Mockup or Graphic Placeholder */}
         <div className="mt-16 w-full max-w-5xl rounded-xl border border-border/50 bg-card/50 backdrop-blur aspect-video flex items-center justify-center overflow-hidden relative shadow-2xl">
-          <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-primary/5 pointer-events-none z-10" />
+          <div className="absolute inset-0 bg-linear-to-tr from-transparent to-primary/5 pointer-events-none z-10" />
           <Image src="/hero.png" alt="Platform Dashboard Preview" fill className="object-cover opacity-90" priority />
         </div>
       </section>
@@ -295,7 +295,7 @@ export default function Home() {
                 <CardContent className="pt-6">
                   <div className="flex flex-col space-y-4">
                     <div className="flex items-center space-x-4">
-                      <div className="relative h-12 w-12 flex-shrink-0">
+                      <div className="relative h-12 w-12 shrink-0">
                         <Image
                           width={40}
                           height={40}

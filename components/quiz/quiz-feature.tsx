@@ -177,7 +177,7 @@ export function QuizFeature() {
                 <CardContent className="space-y-3">
                     {currentQ.options.map((opt, i) => {
                         let buttonVariant: "outline" | "default" | "secondary" | "destructive" = "outline";
-                        let isCorrect = opt === currentQ.answer;
+                        const isCorrect = opt === currentQ.answer;
 
                         if (isAnswerRevealed) {
                             if (isCorrect) {
@@ -253,7 +253,7 @@ export function QuizFeature() {
                 </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">
-                        {message} Review your knowledge gaps and try again whenever you're ready.
+                        {message} Review your knowledge gaps and try again whenever you&apos;re ready.
                     </p>
                 </CardContent>
                 <CardFooter>

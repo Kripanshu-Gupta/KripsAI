@@ -24,7 +24,7 @@ export function TodoList({ tasks, onToggle, onDelete }: TodoListProps) {
                 <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                     <ListTodo className="w-8 h-8 text-primary/50" />
                 </div>
-                <h3 className="text-xl font-medium tracking-tight mb-2">You're all caught up!</h3>
+                <h3 className="text-xl font-medium tracking-tight mb-2">You&apos;re all caught up!</h3>
                 <p className="text-muted-foreground text-sm max-w-xs">
                     No active tasks are scheduled. Take a break, or add a new goal above.
                 </p>
@@ -34,7 +34,7 @@ export function TodoList({ tasks, onToggle, onDelete }: TodoListProps) {
 
     return (
         <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
-            <ul className="flex flex-col list-none m-0 p-0 relative min-h-[500px]">
+            <ul className="flex flex-col list-none m-0 p-0 relative min-h-125">
                 {/* 
                   AnimatePresence tracks mounting/unmounting to trigger Framer Motion's exit animations 
                 */}

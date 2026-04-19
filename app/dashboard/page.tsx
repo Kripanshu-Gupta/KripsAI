@@ -28,7 +28,7 @@ export default async function DashboardPage() {
             <div>
                 <h1 className="text-3xl font-bold tracking-tight">Welcome back, {dbUser.name?.split(' ')[0] || "User"}!</h1>
                 <p className="text-muted-foreground mt-2">
-                    Here is your AI career coach dashboard. Let's get to work on your personalized tools for the {dbUser.industry} industry.
+                    Here is your AI career coach dashboard. Let&apos;s get to work on your personalized tools for the {dbUser.industry} industry.
                 </p>
             </div>
 

@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { generateCareerContent } from "@/lib/gemini";
+import { generateCareerContent, parseJsonFromGemini } from "@/lib/gemini";
 
 // Helper prompt to generate the questions
 const generateInterviewQuestionsPrompt = (
@@ -53,8 +53,8 @@ export async function generateInterviewQuestions(jobTitle: string) {
     }
 
     try {
-        // Strip potential markdown blocks if Gemini stubbornly includes them
-        const cleanedJson = rawResponse.replace(/```json/g, "").replace(/```/g, "").trim();
+        // Extract JSON specifically from the response
+        const cleanedJson = parseJsonFromGemini(rawResponse);
         questions = JSON.parse(cleanedJson);
 
         if (!Array.isArray(questions)) {
@@ -118,7 +118,7 @@ export async function submitInterviewAnswers(data: {
 
     let feedbackData;
     try {
-        const cleanedJson = rawResponse.replace(/```json/g, "").replace(/```/g, "").trim();
+        const cleanedJson = parseJsonFromGemini(rawResponse);
         feedbackData = JSON.parse(cleanedJson);
     } catch (error) {
         console.error("Failed to parse feedback:", rawResponse);
